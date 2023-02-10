@@ -41,7 +41,8 @@ export default function Register({ navigation }) {
     return unsubscribe;
   }, []);
 
-  if (loding == true) {
+  if (loding == true)
+ {
     return (
       <View
         style={{
@@ -153,7 +154,7 @@ export default function Register({ navigation }) {
             setUserName(null);
             setname(null);
             setpassword(null);
-            navigation.navigate("MessageScreen");
+            navigation.navigate("chattingScreen",{user:res});
           });
         }}
       />
@@ -189,8 +190,10 @@ const saveData = async (name, userName, password) => {
       userName: userName,
       password: encryption(password),
     });
-    console.log("Document written with ID: ", docRef.id);
+    return docRef
+    console.log("Document written with ID: ", docRef);
   } catch (e) {
+    return null
     console.error("Error adding document: ", e);
   }
 };

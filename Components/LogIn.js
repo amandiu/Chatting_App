@@ -9,7 +9,6 @@ import {
   Alert,
 } from "react-native";
 import { encryption } from "../crypto";
-import { getFirestore } from "firebase/firestore";
 import { app } from "../firebaseConfig";
 import {
   collection,
@@ -17,12 +16,14 @@ import {
   query,
   where,
   onSnapshot,
+  getFirestore
 } from "firebase/firestore";
 
 export default function LogIn({ navigation }) {
   const [userName, setUserName] = useState();
   const [password, setPassword] = useState();
   const [allData, setalldata] = useState();
+  const [loding,setloding] = useState(false);
   const db = getFirestore(app);
 
   useEffect(() => {
@@ -36,6 +37,21 @@ export default function LogIn({ navigation }) {
     });
     return unsubscribe;
   }, []);
+
+  if (loding == true)
+  {
+     return (
+       <View
+         style={{
+           justifyContent: "center",
+           alignItems: "center",
+           flex: 1,
+         }}
+       >
+         <Text>loding..</Text>
+       </View>
+     );
+   }
 
   return (
     <View
@@ -117,7 +133,7 @@ export default function LogIn({ navigation }) {
             (d) => d.userName == userName && d.password == encryption(password)
           ); //filtering user Name and password from firebase stor;
           if (arr.length > 0) {
-            navigation.replace("chattingScreen");
+            navigation.replace("chattingScreen",{user:arr[0]});
           } else {
             Alert.alert("Wrong Cadienshile");
           }
@@ -140,6 +156,7 @@ export default function LogIn({ navigation }) {
           */
           //console.log(encryption(password));
           //navigation.navigate('chattingScreen')
+          setloding(true)
         }}
       />
       <MyButton
